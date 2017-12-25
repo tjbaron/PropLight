@@ -144,7 +144,7 @@ window.onload = function() {
 		var tempVid = data.video;
 		data.video = undefined;
 		jso = JSON.stringify(data, null, 2);
-		request('http://192.168.1.76:8000/load', function(){}, jso);
+		request('http://192.168.0.1:8000/load', function(){}, jso);
 		data.video = tempVid;
 	}
 	clear.onclick = function() {
@@ -169,7 +169,7 @@ window.onload = function() {
 		}
 	};
 
-	request('http://192.168.1.76:8000/list', function(res) {
+	request('http://192.168.0.1:8000/list', function(res) {
 		var clips = JSON.parse(res.responseText);
 		for (let c of clips) {
 			c = c.split('.')[0];
@@ -177,7 +177,7 @@ window.onload = function() {
 			el.setAttribute('type', 'button');
 			el.setAttribute('value', c);
 			el.onclick = function () {
-				request('http://192.168.1.76:8000/play?name='+c);
+				request('http://192.168.0.1:8000/play?name='+c);
 			};
 			mainarea.appendChild(el);
 		}

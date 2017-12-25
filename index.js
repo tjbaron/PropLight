@@ -79,7 +79,7 @@ connect.use('/list', function(req, res, next) {
 	var files = [];
 	for (var f of d) {
 		var pts = f.split('.');
-		if (pts[pts.length-1] === 'json' && pts !== 'package.json') files.push(f);
+		if (pts[pts.length-1] === 'json' && pts[0].indexOf('package') === -1) files.push(f);
 	}
 	res.end(JSON.stringify(files));
 });
