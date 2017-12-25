@@ -1,0 +1,86 @@
+<!DOCTYPE>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>TF Prop Light</title>
+	<meta name="description" content="DMX Controller" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0"/>
+	<meta name="apple-mobile-web-app-capable" content="yes">
+</head>
+<body>
+<style>
+	input {
+		border: none;
+		padding: 20px;
+	}
+	#red {
+		background: #AF4C50;
+	}
+	#green {
+		background: #4CAF50;
+	}
+	#blue {
+		background: #4C50AF;
+	}
+
+	.slider {
+	-webkit-appearance: none;
+	width: 100%;
+	height: 30px;
+	border-radius: 5px;   
+	background: #d3d3d3;
+	outline: none;
+	opacity: 0.7;
+	-webkit-transition: .2s;
+	transition: opacity .2s;
+	}
+
+	.slider::-webkit-slider-thumb {
+	-webkit-appearance: none;
+	appearance: none;
+	width: 50px;
+	height: 50px;
+	border-radius: 50%; 
+	background: #4CAF50;
+	cursor: pointer;
+	}
+
+	.slider::-moz-range-thumb {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	background: #4CAF50;
+	cursor: pointer;
+	}
+</style>
+
+Hue
+<input id="hue" min="0" max="255" value="255" type="range" class="slider" />
+Saturation
+<input id="saturation" min="0" max="255" value="255" type="range" class="slider" />
+Luminance
+<input id="brightness" min="0" max="255" value="255" type="range" class="slider" />
+<script>
+	function request(url, callback, data) {
+		var req = new XMLHttpRequest();
+		req.onreadystatechange = function() {
+			if (req.readyState == 4 && req.status == 200) {
+				callback(req);
+			}
+		};
+		if (arguments.length === 2) {
+			req.open('GET', url, true);
+			req.send();
+		} else if (arguments.length === 3) {
+			req.open('POST', url, true);
+			req.send(data);
+		}
+	}
+	hue.oninput = saturation.oninput = brightness.oninput = function() {
+		request('/set?h='+hue.value+'&s='+saturation.value+'&l='+brightness.value, function(){});
+	}
+	document.body.onmousemove = function(e) {
+		e.preventDefault();
+	};
+</script>
+</body>

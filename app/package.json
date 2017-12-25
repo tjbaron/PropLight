@@ -1,0 +1,21 @@
+{
+  "name": "tfproplight",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "color-convert": "^1.9.1",
+    "dmx": "0.0.5",
+    "electron-prebuilt": "^1.4.13",
+    "mathjs": "^3.18.0"
+  },
+  "devDependencies": {
+    "electron": "1.7.9",
+    "electron-rebuild": "^1.6.0"
+  }
+}

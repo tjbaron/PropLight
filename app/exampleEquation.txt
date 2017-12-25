@@ -1,0 +1,21 @@
+last = 0
+
+// Crazy Example
+hue = (cos(time*2)*180)+180
+saturation = (time-last > 2 ? random()*100 : saturation)
+last = time-last>2.5 ? time : last
+brightness = (cos(time)*25)+50
+
+
+// Police Lights
+hue = 360-(cos(time*10)*55)-55
+saturation = 100
+brightness = (time-last > 4 ? random()*100 : 100)
+last = time-last>5 ? time : last
+
+// Other
+abc = round(abs(sin(time*4)+cos(time*3)))
+def = round(abs(cos(time*9)+sin(time*8)))
+hue = abc==1 ? 210 : 0
+brightness = def == 1 ? 0 : 100
+saturation = 100
