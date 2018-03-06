@@ -101,17 +101,23 @@ window.onload = function() {
 		var filePath = dialog.showOpenDialog({});
 		console.log(filePath);
 		var res = fs.readFileSync(filePath[0]);
-		data = JSON.parse(res);
+		loadThis(JSON.parse(res));
+	};
+	function loadThis(dn) {
+		data = dn;
 		projname.value = data.name;
 		initEq.value = data.initEquation;
 		brightnessEq.value = data.equation;
 		hue.value = data.hue;
 		saturation.value = data.saturation;
 		brightness.value = data.brightness;
+		try {
+			mathjs.eval(initEq.value, current);
+		} catch(e) {}
 		if (data.saturationBoost > 0) saturation.value = data.saturationBoost+100;
 		if (data.brightnessBoost > 0) brightness.value = data.brightnessBoost+100;
-		player.src = data.video;
-	};
+		if (data.video && data.video.length > 0) player.src = data.video;
+	}
 	function updateData() {
 		data.name = projname.value;
 		data.initEquation = initEq.value;
@@ -171,15 +177,21 @@ window.onload = function() {
 
 	request('http://192.168.0.1:8000/list', function(res) {
 		var clips = JSON.parse(res.responseText);
+		connecteddiv.style.display = '';
+		//clips = ['Fire', 'Police', 'Lightning', 'News Conference'];
 		for (let c of clips) {
 			c = c.split('.')[0];
+			if (c == 'undefined') continue;
 			var el = document.createElement('input');
 			el.setAttribute('type', 'button');
 			el.setAttribute('value', c);
+			el.style.marginRight = '10px';
 			el.onclick = function () {
-				request('http://192.168.0.1:8000/play?name='+c);
+				request('http://192.168.0.1:8000/play?name='+c, function(resp) {
+					loadThis(JSON.parse(resp.responseText));
+				});
 			};
-			mainarea.appendChild(el);
+			loadeddiv.appendChild(el);
 		}
 	});
 };
@@ -202,63 +214,3 @@ function request(url, callback, sendData) {
 	  req.send(sendData);
 	}
 }
-
-/*var darr = [];
-var app = require('electron').remote; 
-var fs = require('fs');
-
-var dialog = app.dialog;
-dialog.showOpenDialog((fileNames) => {
-vid.setAttribute('src', fileNames);
-});
-
-var context = can.getContext('2d');
-
-var DMX = require('dmx');
-var dmx = new DMX();
-
-var universe;
-vid.addEventListener('play', function(){
-	console.log('reset');
-	darr = [];
-	universe = dmx.addUniverse('lightName', 'artnet', devip.value||'2.2.2.1');
-	//var universe = dmx.addUniverse('lightName', 'null')
-	//can.width = vid.videoWidth/2; can.height = vid.videoHeight/2;
-	can.width = can.height = 200;
-	can.style.width = '50px'; can.style.height = '50px';
-	draw(this,context,can.width,can.height);
-},false);
-
-function draw(v,c,w,h) {
-	if(v.paused || v.ended) return false;
-	c.drawImage(v,0,0,w,h);
-	var r = channel.value/1;
-	var g = r+1; var b = r+2;
-	var pxl = context.getImageData(50, 50, 100, 100).data;
-	var tot = [0,0,0];
-	for (var i=0; i<40000; i+=4) {
-	tot[0] += pxl[i];
-	tot[1] += pxl[i+1];
-	tot[2] += pxl[i+2];
-	}
-	//console.log(pxl);
-	var ref = {};
-	tot[0] = tot[0]/10000;
-	tot[1] = tot[1]/10000;
-	tot[2] = tot[2]/10000;
-	ref[r] = tot[0]/10000;
-	ref[g] = tot[1]/10000;
-	ref[b] = tot[2]/10000;
-	console.log(convert.rgb.hsl(tot[0], tot[1], tot[2]));
-	var hsl = convert.rgb.hsl(tot[0], tot[1], tot[2]);
-	darr.push([hsl[0], hsl[1]*2.55, hsl[2]*2.55]);
-	setTimeout(draw,33,v,c,w,h);
-	universe.update(ref);
-}
-
-todevice.onclick = function() {
-	var jso = JSON.stringify(darr);
-	fs.writeFileSync('save.json', jso);
-	request('http://192.168.1.76/load', function(){}, jso);
-	console.log(darr);
-};*/

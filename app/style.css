@@ -202,6 +202,7 @@ input[type=button] {
 	margin: 0px;
 	margin-left: 0px;
 	line-height: 30px;
+	cursor: pointer;
 }
 
 .slider {

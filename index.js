@@ -61,6 +61,11 @@ connect.use('/load', function(req, res, next) {
 	});
 	req.on('end', function () {
 		save = JSON.parse(body);
+		try {
+			mathjs.eval(save.initEquation, current);
+		} catch(e) {}
+		clearInterval(interal);
+		setInterval(myInterval, save.speed||speed);
 		fs.writeFileSync('save.json', body);
 		if (save.name) fs.writeFileSync(save.name+'.json', body);
 		res.end('OK');
@@ -70,8 +75,15 @@ connect.use('/load', function(req, res, next) {
 connect.use('/play', function(req, res, next) {
 	var url_parts = url.parse(req.url, true);
 	var query = url_parts.query;
-	fs.readFileSync(query.name+'.json');
-	res.end('OK');
+	var nl = fs.readFileSync(query.name+'.json');
+	save = JSON.parse(nl);
+	try {
+		mathjs.eval(save.initEquation, current);
+	} catch(e) {}
+	clearInterval(interal);
+	setInterval(myInterval, save.speed||speed);
+	console.log(nl);
+	res.end(nl);
 });
 
 connect.use('/list', function(req, res, next) {
@@ -89,9 +101,10 @@ connect.use('/list', function(req, res, next) {
 	res.end(fs.readFileSync('www/index.html'));
 });*/
 
+var speed = 33;
 var frame = 0;
 var current = {hue: 0, saturation: 0, brightness: 0};
-setInterval(function() {
+function myInterval() {
 	if (save === null) return;
 
 	if (save.sequence.length > 0) {
@@ -124,6 +137,7 @@ setInterval(function() {
 	
 	let data = Buffer.from([Math.floor(fin.b*2.55), 128, 0, 0, Math.floor(fin.h*(255/360)), Math.floor(fin.s*2.55)]);
 	DMX.transmit(data);
-}, 34);
+}
+var interal = setInterval(myInterval, speed);
 
 app.listen(8000);
