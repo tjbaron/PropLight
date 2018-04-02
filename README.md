@@ -1,8 +1,5 @@
 # Light Prop
 
-![alt text](https://raw.githubusercontent.com/tjbaron/PropLight/main/img/1.png)
-![alt text](https://raw.githubusercontent.com/tjbaron/PropLight/main/img/2.png)
-
 This project allows professional grade rgb film lights to mimic a source video. This is useful to simulate fire, police lights, thunder and more. There is also a field in the app that allows you to specify effects via math equations. Equations are run at 30 fps, retain variable memory from the last frame and allow you to set hue, saturation and brightness (be aware that HSB and HSL are not the same). The following example equation will give you something similar to police lights:
 
 	hue = 360-(cos(time*10)*55)-55
@@ -39,3 +36,9 @@ Note the last step builds for Mac OS. Adjust the platform and arch as necessary.
 # Usage
 
 The Electron app allows you to preview light behaviour, even without a Raspberry Pi. Feel free to experiment.
+
+# Screenshots
+
+![alt text](https://raw.githubusercontent.com/tjbaron/PropLight/master/img/1.jpg)
+![alt text](https://raw.githubusercontent.com/tjbaron/PropLight/master/img/2.jpg)
+
